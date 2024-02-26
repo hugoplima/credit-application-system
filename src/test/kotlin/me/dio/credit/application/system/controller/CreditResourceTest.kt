@@ -49,10 +49,12 @@ class CreditResourceTest {
 
     @Test
     fun `should create a credit and return 201 status`() {
+        //given
         val customer: Customer = customerRepository.save(builderCustomerDto().toEntity())
         val credit: CreditDto = builderCreditDto(customerId = customer.id)
         val valueString: String = objectMapper.writeValueAsString(credit)
-
+        //when
+        //then        
         mockMvc.perform(
                 MockMvcRequestBuilders.post(URL)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -64,10 +66,11 @@ class CreditResourceTest {
 
     @Test
     fun `should not save a credit with custumer ID invalid and return 409 status`() {
-
+        //given
         val credit: CreditDto = builderCreditDto(customerId = 1)
         val valueString: String = objectMapper.writeValueAsString(credit)
-
+        //when
+        //then
         mockMvc.perform(
                 MockMvcRequestBuilders.post(URL)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -78,13 +81,15 @@ class CreditResourceTest {
 
     @Test
     fun `should find all credit and return 200 status`() {
+        //given
         val customer: Customer = customerRepository.save(builderCustomerDto().toEntity())
         val credit: List<Credit> = listOf(
                 creditRepository.save(builderCreditDto(customerId = customer.id).toEntity()),
                 creditRepository.save(builderCreditDto(customerId = customer.id).toEntity())
         )
 
-
+        //when
+        //then
         mockMvc.perform(
                 MockMvcRequestBuilders.get("$URL?customerId=${customer.id}")
                         .accept(MediaType.APPLICATION_JSON)
@@ -95,9 +100,11 @@ class CreditResourceTest {
 
     @Test
     fun `should find credit by creditcode and return 200 status`() {
+        //given
         val customer: Customer = customerRepository.save(builderCustomerDto().toEntity())
         val credit: Credit = creditRepository.save(builderCreditDto(customerId = customer.id).toEntity())
-
+        //when
+        //then
         mockMvc.perform(
                 MockMvcRequestBuilders.get("$URL/${credit.creditCode}?customerId=${customer.id}")
                         .accept(MediaType.APPLICATION_JSON)
@@ -107,9 +114,10 @@ class CreditResourceTest {
 
     @Test
     fun `should not find credit with invalid creditcode and return 400 status`() {
-
+        //given
         val invalidId = 2L
-
+        //when
+        //then
         mockMvc.perform(
                 MockMvcRequestBuilders.get("$URL/$invalidId")
                         .accept(MediaType.APPLICATION_JSON)
